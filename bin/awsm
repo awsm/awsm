@@ -1,0 +1,8 @@
+#!/bin/bash
+
+BIN_FILE=$(realpath ${BASH_SOURCE[0]})
+INSTALL_DIR=$(realpath `dirname ${BIN_FILE}`/../)
+
+for f in $INSTALL_DIR/lib/awsm*.sh; do source $f; done
+
+$@
