@@ -109,3 +109,33 @@ function asg-capacity {
   sort                                         |
   column -s$'\t' -t
 }
+
+function lambdas {
+  local query='
+    Functions[][
+      [
+        FunctionName,
+        Runtime
+      ]
+    ][]
+  '
+  aws lambda list-functions \
+    --output text           \
+    --query "$query"        |
+  sort                      |
+  column -s$'\t' -t
+}
+
+function lambda-invoke {
+  local lambda_line=$(lambdas | fzf)
+  local lambda_id=$(echo $lambda_line | read_inputs)
+
+  local out_file="/tmp/awsm-lambda.log"
+  aws lambda invoke --function-name $lambda_id \
+    --invocation-type RequestResponse \
+    --log-type Tail \
+    --payload '{}' \
+    $out_file > /dev/null
+
+  cat $out_file
+}
