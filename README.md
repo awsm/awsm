@@ -42,6 +42,14 @@ i-ze2d251b           ami-b85900db  m4.large    running  Container-Service       
 ```
 
 
+### Lambda 
+
+```sh
+~ λ  awsm lambda-invoke
+```
+
+[![asciicast](https://asciinema.org/a/0s7kpmf5oqibzuqv9r9d6p0w3.png)](https://asciinema.org/a/0s7kpmf5oqibzuqv9r9d6p0w3)
+
 ### Cloudformation Stacks
 
 ```sh
