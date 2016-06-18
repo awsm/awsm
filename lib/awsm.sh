@@ -147,3 +147,69 @@ function lambda-invoke {
     exit $status
   fi
 }
+
+function cloudwatch-groups {
+  local query='
+    logGroups[][
+      [
+        logGroupName
+      ]
+    ][]
+  '
+  aws logs describe-log-groups \
+    --output text           \
+    --query "$query"        |
+  sort
+}
+
+function cloudwatch-streams {
+  local query='
+    logStreams[][
+      [
+        logStreamName
+      ]
+    ][]
+  '
+  aws logs describe-log-streams --log-group-name $1 \
+    --output text           \
+    --query "$query"
+}
+
+function get-log-events {
+  local query='
+    events[][
+      [
+        message
+      ]
+    ][]
+  '
+
+  local endtime=${3:-$(($(date +"%s") * 1000))}
+  aws logs get-log-events \
+    --log-group-name $1   \
+    --log-stream-name $2  \
+    --end-time $endtime   \
+    $([[ -n $4 ]] && echo --start-time $4) \
+    --output text         \
+    --query "$query"
+}
+
+function logs {
+  local cwg_line=$(cloudwatch-groups | $FUZZY_FILTER)
+  local cwg=$(echo $cwg_line | read_inputs)
+
+  local cws_line=$(cloudwatch-streams $cwg | $FUZZY_FILTER)
+  local cws=$(echo $cws_line | read_inputs)
+
+  endtime=$(($(date +"%s") * 1000))
+  get-log-events $cwg $cws
+
+  while :
+  do
+    starttime=$endtime
+    endtime=$(($(date +"%s") * 1000))
+    get-log-events $cwg $cws $endtime $starttime
+    sleep 1
+  done
+
+}
