@@ -49,6 +49,15 @@ i-ze2d251b           ami-b85900db  m4.large    running  Container-Service       
 
 [![asciicast](https://asciinema.org/a/0s7kpmf5oqibzuqv9r9d6p0w3.png?s=1)](https://asciinema.org/a/0s7kpmf5oqibzuqv9r9d6p0w3)
 
+
+### Logs
+
+```sh
+~ λ  awsm logs
+```
+
+[![asciicast](https://asciinema.org/a/c3iin8x1tvmb901tevdu6dxdy.png)](https://asciinema.org/a/c3iin8x1tvmb901tevdu6dxdy)
+
 ### Cloudformation Stacks
 
 ```sh
