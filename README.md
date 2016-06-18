@@ -41,7 +41,6 @@ i-zf24deae           ami-zc45b86f  t2.medium   running  hotels-resque-ami-201606
 i-ze2d251b           ami-b85900db  m4.large    running  Container-Service              2016-01-20T03:47:13.000Z  ap-southeast-2b
 ```
 
-
 ### Lambda 
 
 ```sh
