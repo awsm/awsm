@@ -1,4 +1,4 @@
-[![awsm](https://avatars1.githubusercontent.com/u/19984185?v=3&s=100)](https://github.com/awsm/awsm)
+[![awsm](https://avatars1.githubusercontent.com/u/19984185?v=3&u=f189e3da83a6494a25b2734de380399bc1be67d0&s=140)](https://github.com/awsm/awsm)
 > Make aws more awesome
 
 # 👌 Awsm
