@@ -1,3 +1,4 @@
+: ${FUZZY_FILTER="fzf"}
 SSH_BIN=$(which ssh)
 
 function stacks {
@@ -63,10 +64,12 @@ read_stdin() {
 }
 
 function ssh {
-  local instance_line=$(instances | fzf)
+  local instance_line=$(instances | $FUZZY_FILTER)
   local instance_id=$(echo $instance_line | read_inputs)
 
-  $SSH_BIN $instance_id
+  if [ -n "$instnace_id" ]; then
+    $SSH_BIN $instance_id
+  fi
 }
 
 function asgs {
@@ -127,15 +130,20 @@ function lambdas {
 }
 
 function lambda-invoke {
-  local lambda_line=$(lambdas | fzf)
+  local lambda_line=$(lambdas | $FUZZY_FILTER)
   local lambda_id=$(echo $lambda_line | read_inputs)
 
-  local out_file="/tmp/awsm-lambda.log"
-  aws lambda invoke --function-name $lambda_id \
-    --invocation-type RequestResponse \
-    --log-type Tail \
-    --payload '{}' \
-    $out_file > /dev/null
+  if [ -n "$lambda_id" ]; then
+    local out_file="/tmp/awsm-lambda.log"
+    aws lambda invoke --function-name $lambda_id \
+      --invocation-type RequestResponse \
+      --log-type Tail \
+      --payload '{}' \
+      $out_file > /dev/null
+    local status=$?
 
-  cat $out_file
+    cat $out_file && rm $out_file
+
+    exit $status
+  fi
 }
