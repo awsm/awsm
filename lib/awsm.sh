@@ -67,7 +67,7 @@ function ssh {
   local instance_line=$(instances | $FUZZY_FILTER)
   local instance_id=$(echo $instance_line | read_inputs)
 
-  if [ -n "$instnace_id" ]; then
+  if [ -n "$instance_id" ]; then
     $SSH_BIN $instance_id
   fi
 }
