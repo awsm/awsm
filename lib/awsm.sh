@@ -1,5 +1,20 @@
+
 : ${FUZZY_FILTER="fzf"}
 SSH_BIN=$(which ssh)
+
+## Environment setup
+
+if [ -r ~/.awsm ]; then
+  echo "Reading user config...." >&2
+  . ~/.awsm
+fi
+
+SSH_COMMAND=$SSH_BIN
+if [ -n "$SSH_USER" ]; then
+  SSH_COMMAND="$SSH_BIN $SSH_USER@"
+fi
+
+##
 
 function stacks {
   local filter=$@
@@ -68,7 +83,9 @@ function ssh {
   local instance_id=$(echo $instance_line | read_inputs)
 
   if [ -n "$instance_id" ]; then
-    $SSH_BIN $instance_id
+    EXEC="$SSH_COMMAND$instance_id"
+    echo "Connecting: $EXEC"
+    $EXEC
   fi
 }
 
