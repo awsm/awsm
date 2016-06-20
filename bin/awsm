@@ -4,12 +4,18 @@ function realpath { echo $(cd $(dirname $1); pwd)/$(basename $1); }
 
 BIN_FILE=$(realpath ${BASH_SOURCE[0]})
 INSTALL_DIR=$(realpath `dirname ${BIN_FILE}`/../)
-PLUGINS_DIR=$HOME/.awsm/plugins
+: ${AWSM_HOME=$HOME/.awsm}
+: ${AWSM_CONFIG=$AWSM_HOME/config}
+: ${AWSM_PLUGINS_DIR=$AWSM_HOME/plugins}
 
 for f in $INSTALL_DIR/lib/awsm*.sh; do source $f; done
 
-if [ -d "$PLUGINS_DIR" ]; then
-  for f in $PLUGINS_DIR/awsm*.sh; do source $f; done
+if [ -f "$AWSM_CONFIG" ]; then
+  . $AWSM_CONFIG
+fi
+
+if [ -d "$AWSM_PLUGINS_DIR" ]; then
+  for f in $AWSM_PLUGINS_DIR/awsm*.sh; do source $f; done
 fi
 
 $@

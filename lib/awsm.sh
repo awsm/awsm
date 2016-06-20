@@ -1,4 +1,6 @@
+: ${AWSM_SSH_USER=$(whoami)}
 : ${FUZZY_FILTER="fzf"}
+
 SSH_BIN=$(which ssh)
 
 function stacks {
@@ -67,8 +69,8 @@ function ssh {
   local instance_line=$(instances | $FUZZY_FILTER)
   local instance_id=$(echo $instance_line | read_inputs)
 
-  if [ -n "$instnace_id" ]; then
-    $SSH_BIN $instance_id
+  if [ -n "$instance_id" ]; then
+    $SSH_BIN $AWSM_SSH_USER@$instance_id
   fi
 }
 
