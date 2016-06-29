@@ -18,4 +18,8 @@ if [ -d "$AWSM_PLUGINS_DIR" ]; then
   for f in $AWSM_PLUGINS_DIR/awsm*.sh; do source $f; done
 fi
 
+set -a
+[ -f .env.local ] && . .env.local
+set +a
+
 $@
