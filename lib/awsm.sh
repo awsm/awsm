@@ -1,5 +1,6 @@
 : ${AWSM_SSH_USER=$(whoami)}
 : ${FUZZY_FILTER="fzf"}
+: ${AWSM_AWS_CONNECT_IP}="private"}
 
 SSH_BIN=$(which ssh)
 
@@ -29,12 +30,21 @@ function stacks {
   grep --color=never -i ${filter:-".*"}
 }
 
-
-function instances {
-  local filter=$@
-  local query='
-    Reservations[].Instances[][
-        InstanceId,
+function instance_query_str {
+  local public_ip_query='PublicIpAddress, PrivateIpAddress, InstanceId,'
+  local private_ip_query='PrivateIpAddress, PublicIpAddress, InstanceId,'
+  case "$AWSM_AWS_CONNECT_IP" in
+    private)
+      local ip_query=$private_ip_query
+      ;;
+    public)
+      local ip_query=$public_ip_query
+      ;;
+    *)
+      local ip_query=$private_ip_query
+      ;;
+  esac
+  echo 'Reservations[].Instances[]['$ip_query'
         ImageId,
         InstanceType,
         State.Name,
@@ -43,7 +53,11 @@ function instances {
         Placement.AvailabilityZone
     ]
   '
+}
 
+function instances {
+  local filter=$@
+  local query=$(instance_query_str)
   aws ec2 describe-instances   \
     --query "${query}"         \
     --output ${output:-"text"} |
