@@ -1,0 +1,10 @@
+# Place this file in ~./awsm/config in order to setup defaults
+
+# Used to set the user name used for connecting via ssh
+# Defaults to `whoami`
+# AWSM_SSH_USER=user.name
+
+# Used to set whether you use public or private ip address to connect to instances.
+# Values of either 'public' or 'private'. 
+# Defaults to private
+# AWSM_AWS_CONNECT_IP=private
