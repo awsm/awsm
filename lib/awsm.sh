@@ -31,8 +31,8 @@ function stacks {
 }
 
 function instance_query_str {
-  local public_ip_query='PublicIpAddress, PrivateIpAddress, InstanceId,'
-  local private_ip_query='PrivateIpAddress, PublicIpAddress, InstanceId,'
+  local public_ip_query='PublicIpAddress,'
+  local private_ip_query='PrivateIpAddress,'
   case "$AWSM_AWS_CONNECT_IP" in
     private)
       local ip_query=$private_ip_query
@@ -45,10 +45,11 @@ function instance_query_str {
       ;;
   esac
   echo 'Reservations[].Instances[]['$ip_query'
+        [Tags[?Key==`Name`].Value][0][0],
+        State.Name,
+        InstanceId,
         ImageId,
         InstanceType,
-        State.Name,
-        [Tags[?Key==`Name`].Value][0][0],
         LaunchTime,
         Placement.AvailabilityZone
     ]
