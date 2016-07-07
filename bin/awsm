@@ -15,6 +15,7 @@ if [ -f "$AWSM_CONFIG" ]; then
 fi
 
 if [ -d "$AWSM_PLUGINS_DIR" ]; then
+  for f in $AWSM_PLUGINS_DIR/**/awsm*.sh; do source $f; done
   for f in $AWSM_PLUGINS_DIR/awsm*.sh; do source $f; done
 fi
 
