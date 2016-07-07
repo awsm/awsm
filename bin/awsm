@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 function realpath { echo $(cd $(dirname $1); pwd)/$(basename $1); }
 
@@ -8,15 +9,26 @@ INSTALL_DIR=$(realpath `dirname ${BIN_FILE}`/../)
 : ${AWSM_CONFIG=$AWSM_HOME/config}
 : ${AWSM_PLUGINS_DIR=$AWSM_HOME/plugins}
 
-for f in $INSTALL_DIR/lib/awsm*.sh; do source $f; done
 
-if [ -f "$AWSM_CONFIG" ]; then
-  . $AWSM_CONFIG
-fi
+function load_awsm_core {
+  for f in $INSTALL_DIR/lib/awsm*.sh; do source $f; done
+}
 
-if [ -d "$AWSM_PLUGINS_DIR" ]; then
-  for f in $AWSM_PLUGINS_DIR/**/awsm*.sh; do source $f; done
-  for f in $AWSM_PLUGINS_DIR/awsm*.sh; do source $f; done
-fi
+function load_config {
+  if [ -f "$AWSM_CONFIG" ]; then
+    . $AWSM_CONFIG
+  fi
+}
 
+function source_plugins {
+  shopt -s nullglob
+  if [ -d "$AWSM_PLUGINS_DIR" ]; then
+    for f in $AWSM_PLUGINS_DIR/**/awsm*.sh; do source $f; done
+    for f in $AWSM_PLUGINS_DIR/awsm*.sh; do source $f; done
+  fi
+}
+
+load_awsm_core
+load_config
+source_plugins
 $@

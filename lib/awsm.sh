@@ -1,6 +1,6 @@
 : ${AWSM_SSH_USER=$(whoami)}
 : ${FUZZY_FILTER="fzf"}
-: ${AWSM_AWS_CONNECT_IP}="private"}
+: ${AWSM_AWS_CONNECT_IP="private"}
 
 SSH_BIN=$(which ssh)
 
