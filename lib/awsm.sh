@@ -147,6 +147,8 @@ function lambdas {
 }
 
 function lambda-invoke {
+  local payload="{}"
+  if [ ! -t 0 ] ; then payload=$(cat) ; fi
   local lambda_line=$(lambdas | $FUZZY_FILTER)
   local lambda_id=$(echo $lambda_line | read_inputs)
 
@@ -155,7 +157,7 @@ function lambda-invoke {
     aws lambda invoke --function-name $lambda_id \
       --invocation-type RequestResponse \
       --log-type Tail \
-      --payload '{}' \
+      --payload "${payload:-'{}'}" \
       $out_file > /dev/null
     local status=$?
 
