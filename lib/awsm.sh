@@ -1,4 +1,3 @@
-: ${AWSM_SSH_USER=$(whoami)}
 : ${FUZZY_FILTER="fzf"}
 : ${AWSM_AWS_CONNECT_IP="private"}
 
@@ -85,7 +84,7 @@ function ssh {
   local instance_id=$(echo $instance_line | read_inputs)
 
   if [ -n "$instance_id" ]; then
-    $SSH_BIN $AWSM_SSH_USER@$instance_id
+    $SSH_BIN $instance_id
   fi
 }
 
