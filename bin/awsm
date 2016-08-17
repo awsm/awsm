@@ -3,7 +3,11 @@ set -euo pipefail
 
 function realpath { echo $(cd $(dirname $1); pwd)/$(basename $1); }
 
-BIN_FILE=$(realpath $(readlink ${BASH_SOURCE[0]}))
+BIN_FILE=$(realpath ${BASH_SOURCE[0]})
+if [ -L $BIN_FILE ]; then
+  BIN_FILE=$(readlink ${BIN_FILE})
+fi
+
 INSTALL_DIR=$(realpath `dirname ${BIN_FILE}`/../)
 : ${AWSM_HOME=$HOME/.awsm}
 : ${AWSM_CONFIG=$AWSM_HOME/config}
