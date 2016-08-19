@@ -1,14 +1,10 @@
 : ${FUZZY_FILTER="fzf"}
-
-if [ ! -e "$FUZZY_FILTER" ]; then
-  >&2 echo default filter $FUZZY_FILTER not found, please specify with FUZZY_FILTER
-  exit 1
-fi
-
 : ${AWSM_SSH_USER=""}
 : ${AWSM_AWS_CONNECT_IP="private"}
 
 SSH_BIN=$(which ssh)
+
+type $FUZZY_FILTER >/dev/null 2>&1 || { echo >&2 "default filter $FUZZY_FILTER not found, please specify with FUZZY_FILTER"; exit 1; }
 
 function stacks {
   local filter=$@
