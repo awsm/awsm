@@ -4,6 +4,8 @@
 
 SSH_BIN=$(which ssh)
 
+type $FUZZY_FILTER >/dev/null 2>&1 || { echo >&2 "default filter $FUZZY_FILTER not found, please specify with FUZZY_FILTER"; exit 1; }
+
 function stacks {
   local filter=$@
   local query='StackSummaries[][ StackName ]'
