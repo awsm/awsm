@@ -1,17 +1,20 @@
 #!/bin/bash
 set -euo pipefail
 
-function realpath {
-  local path=$1
-  if [ -L $path ]; then
-    path=$(readlink ${path})
+function _realpath {
+  local local_path=$1
+
+  if [[ ! "`uname`" == 'Darwin' ]]; then
+    if [ -L $local_path ]; then
+      local_path=$(readlink ${local_path})
+    fi
   fi
 
-  echo $(cd $(dirname $path); pwd)/$(basename $path)
+  echo $(cd $(dirname $local_path); pwd)/$(basename $local_path)
 }
 
-BIN_FILE=$(realpath ${BASH_SOURCE[0]})
-INSTALL_DIR=$(realpath `dirname ${BIN_FILE}`/../)
+BIN_FILE=$(_realpath ${BASH_SOURCE[0]})
+INSTALL_DIR=$(_realpath `dirname ${BIN_FILE}`/../)
 : ${AWSM_HOME=$HOME/.awsm}
 : ${AWSM_CONFIG=$AWSM_HOME/config}
 : ${AWSM_PLUGINS_DIR=$AWSM_HOME/plugins}
