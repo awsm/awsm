@@ -49,6 +49,7 @@ function fetch_mfa {
 
 load_awsm_core
 load_config
-fetch_mfa
 source_plugins
+
+fetch_mfa
 $@
