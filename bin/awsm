@@ -38,7 +38,17 @@ function source_plugins {
   fi
 }
 
+function fetch_mfa {
+  $(aws configure list > /dev/null 2>&1)
+  return_code=$?
+
+  if [ $return_code != 0 ]; then
+    exit $return_code
+  fi
+}
+
 load_awsm_core
 load_config
+fetch_mfa
 source_plugins
 $@
