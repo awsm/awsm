@@ -6,6 +6,21 @@ SSH_BIN=$(which ssh)
 
 type $FUZZY_FILTER >/dev/null 2>&1 || { echo >&2 "default filter $FUZZY_FILTER not found, please specify with FUZZY_FILTER"; exit 1; }
 
+function help {
+  echo '
+  Usage: awsm [command]
+
+  Commands:
+    - ssh
+    - instances
+    - lambda-invoke
+    - logs
+    - stacks
+    - asgs
+    - asg-capacity
+  '
+}
+
 function stacks {
   local filter=$@
   local query='StackSummaries[][ StackName ]'
@@ -26,8 +41,8 @@ function stacks {
       UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS    \
       UPDATE_ROLLBACK_FAILED                          \
       UPDATE_ROLLBACK_IN_PROGRESS                     \
-  --query "${query}"             \
-  --output ${output:-"text"}     |
+    --query "${query}"             \
+    --output ${output:-"text"}     |
   sort                           |
   grep --color=never -i ${filter:-".*"}
 }
