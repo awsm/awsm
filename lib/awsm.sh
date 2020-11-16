@@ -12,6 +12,7 @@ function help {
 
   Commands:
     - ssh
+    - ssm
     - instances
     - lambda-invoke
     - logs
@@ -97,6 +98,20 @@ read_stdin() {
       sed 's/\ $//'
 }
 
+read_inputs_instanceid() {
+  echo $(read_stdin_instanceid) $@ |
+    sed -E 's/\ +$//'   |
+    sed -E 's/^\ +//'
+}
+
+read_stdin_instanceid() {
+  [[ -t 0 ]] ||
+    cat                  |
+      awk '{ print $4 }' |
+      tr '\n' ' '        |
+      sed 's/\ $//'
+}
+
 function ssh {
   local instance_line=$(instances | $FUZZY_FILTER)
   local instance_id=$(echo $instance_line | read_inputs)
@@ -105,6 +120,16 @@ function ssh {
     $SSH_BIN \
       $([[ ! -z ${AWSM_SSH_USER} ]] && echo "-o User=${AWSM_SSH_USER}" )   \
       $instance_id
+  fi
+}
+
+function ssm {
+  local instance_line=$(instances | $FUZZY_FILTER)
+  local instance_id=$(echo $instance_line | read_inputs_instanceid)
+
+  if [ -n "$instance_id" ]; then
+     aws ssm start-session \
+      --target $instance_id
   fi
 }
 
